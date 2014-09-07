@@ -71,6 +71,11 @@ get '/new_player' do  # get is a 'redirect'
 end
 
 post '/new_player' do
+  if params[:player_name].empty?
+    @error = "No ghost players allowed. Please enter a name."
+    halt erb(:new_player)
+  end
+  
   session[:player_name] = params[:player_name]
   # progress to the game, now that I have player name.
   redirect '/game'
@@ -94,15 +99,20 @@ end
 
 post '/game/player/hit' do
   session[:player_cards] << session[:deck].pop
-  if calculate_total(session[:player_cards]) > BLACKJACK_AMOUNT
-    @error = "You busted."
+  player_total = calculate_total(session[:player_cards])
+
+  if player_total = BLACKJACK_AMOUNT
+    @success = "Way to go! #{session[:player_name]} hit blackjack"
+    @show_hit_or_stay_buttons = false
+  elsif player_total > BLACKJACK_AMOUNT
+    @error = "Well, Crap!  It looks like #{session[:player_name]} busted :("
     @show_hit_or_stay_buttons = false
   end
   erb :game
 end
 
 post '/game/player/stay' do
-  @success = "You will stay."
+  @success = "#{session[:player_name]} has decided to stay."
   @show_hit_or_stay_buttons = false
 
   erb :game

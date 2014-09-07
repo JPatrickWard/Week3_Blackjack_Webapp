@@ -1,13 +1,11 @@
 <h1>Welcome to Black Jack</h1>
 
-<p>Welcome <%= session[:player_name] %>. </br> Are you ready to become poor?</p>
+<p>Welcome <%= session[:player_name] %>. Are you ready to become poor?</p>
 
 <div class="container-fluid">
   <div class="span4">...</div>
   <div class="span4 offset2">...</div>
 </div>
-
-
 
 <H3> Place your bet for this round</H3>
 <form action="/new_player" method="post">
@@ -17,30 +15,36 @@
 </form>
 
 
-Dealer's Cards:
-<ul>
-  <% session[:dealer_cards].each do |card| %>
-    <li><%= card.to_s %> </li>
-  <% end %>
-</ul>
+<div class="well">
+  <h4>Dealer's Cards:</h4>
+    <% session[:dealer_cards].each do |card| %>
+        <%= card_image(card) %>
+    <% end %>
+</div>
+
 <br>
 
-<%= session[:player_name] %>'s Cards:
-<ul>
-  <% session[:player_cards].each do |card| %>
-      <li><%= card.to_s %> </li>
-  <% end %>
-</ul>
+
+<div class="well">
+  <h4><%= session[:player_name] %>'s Cards:</h4>
+    <% session[:player_cards].each do |card| %>
+        <%= card_image(card) %>
+    <%end %>
+
+</div>
 
 
 <p>
-  What would you like to do?
+  What would <%= session[:player_name] %> like to do?
   <%= session[:player_name] %> has <%= calculate_total(session[:player_cards]) %>
 
-  <form action ="/game/player/hit" method = "post">
-    <input type="submit" class="btn" value="Hit"/>
-  </form>
-<form action ="/game/player/stay" method = "post">
-  <input type="submit" class="btn" value="Stay"/>
-</form>
+  <% if @show_hit_or_stay_buttons %>
+    <form id="hit_form" action ="/game/player/hit" method = "post">
+        <input type="submit" class="btn btn-success" value="Hit"/>
+    </form>
+    <form id="stay_form" action ="/game/player/stay" method = "post">
+        <input type="submit" class="btn btn-danger" value="Stay"/>
+    </form>
+    <% end %>
+
 </p>
