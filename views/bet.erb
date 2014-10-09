@@ -1,0 +1,8 @@
+<h3>Make a bet for this round.</h3>
+<p><%=session[:player_name] %> has $<%= session[:player_pot].to_i%></p>
+<form action='/bet' method='post'>
+  <input type=":text" name=""bet_amount" />
+  <!-- IMPROTANT: All values that come in from forms are Strings. So will need to convert this using .to_i later -->
+  <br/>
+  <input type="submit" value="Place a bet" class="button" />
+</form>
